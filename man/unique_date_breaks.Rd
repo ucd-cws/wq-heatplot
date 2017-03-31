@@ -4,15 +4,13 @@
 \alias{unique_date_breaks}
 \title{Date Breaks}
 \usage{
-unique_date_breaks(dataframe, dateField)
+unique_date_breaks(dateField)
 }
 \arguments{
-\item{dataframe}{R dataframe object with water quality data.}
-
-\item{dateField}{Name of the field with dates}
+\item{dateField}{Field with dates}
 }
 \description{
-This function gets the unqiue months and returns the middle of the month (the 15th) to use as the date breaks
+This function gets the unqiue months and returns the middle of the month (the 15 th) to use as the date breaks
 }
 \examples{
 unique_date_breaks()

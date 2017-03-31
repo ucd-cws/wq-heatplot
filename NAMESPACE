@@ -2,6 +2,9 @@
 
 export(axis_units)
 export(dates)
+export(heatplot)
+export(heatplot.format.default)
 export(list)
+export(month_startdate)
 export(of)
 export(unique)
