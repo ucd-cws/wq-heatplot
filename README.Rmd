@@ -1,0 +1,73 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+## Installation
+
+```{r installation, eval = FALSE}
+library(devtools)
+install_github("ucd-cws/wq-heatplot")
+```
+
+
+## Basic Use
+
+### Load Data
+
+Export all the water quality data from a given slough using the [arcproject-wq-processing toolbox](https://github.com/ucd-cws/arcproject-wq-processing) `Export Heatplot data CSV`
+
+```{r}
+# load data from the csv
+data <- read.csv("tests/example_data.csv", stringsAsFactors = FALSE)
+
+# view first 5 rows
+head(data, 5)
+
+```
+
+### Default Heatplot
+
+```{r}
+library(arc.heatplot)
+
+p <- heatplot(data, dateField = "date_time", distanceField = "m_value", wqVariable = "temp", title="Water Temperature")
+
+plot(p)
+
+```
+
+### Change Color Ramp
+
+```{r,message=FALSE, warning=FALSE}
+
+p2 <- p + change_gradient_breaks(c("blue", "orange", "red"), c(0, 5, 25)) # uses 3 colors with breaks at 0, 5 & 25
+
+plot(p2)
+
+```
+
+
+### Modify plot appearance
+
+```{r,message=FALSE, warning=FALSE}
+
+# modify the plot object using standard ggplot2 operations
+
+# remove legend
+p3 <- p + guides(fill=FALSE) # no legend
+
+# add lines for the xy axis
+p4 <- p3 + theme(axis.line = element_line(color="black", size = 1))
+
+p4
+
+```
