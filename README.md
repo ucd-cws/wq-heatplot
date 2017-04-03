@@ -26,5 +26,3 @@ Export all the water quality data from a given slough using the [arcproject-wq-p
 ```{r}
 data <- read.csv("tests/example_data.csv", stringsAsFactors = FALSE)
 ```
-
-
