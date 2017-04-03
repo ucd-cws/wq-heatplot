@@ -11,6 +11,10 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
+# arc.heatplot 
+
+R package for creating Heatplots for the Arcproject's water quality data.
+
 ## Installation
 
 ```{r installation, eval = FALSE}
@@ -23,7 +27,7 @@ install_github("ucd-cws/wq-heatplot")
 
 ### Load Data
 
-Export all the water quality data from a given slough using the [arcproject-wq-processing toolbox](https://github.com/ucd-cws/arcproject-wq-processing) `Export Heatplot data CSV`
+Export all the water quality data from a given slough using the [arcproject-wq-processing toolbox](https://github.com/ucd-cws/arcproject-wq-processing) `Export Heatplot data CSV` tool.
 
 ```{r}
 # load data from the csv
@@ -69,5 +73,31 @@ p3 <- p + guides(fill=FALSE) # no legend
 p4 <- p3 + theme(axis.line = element_line(color="black", size = 1))
 
 p4
+
+```
+
+### Full Example - custom color scale for salinity for 2016
+
+```{r,message=FALSE, warning=FALSE}
+
+# subset data to only include dates in 2016
+data_sub_2016 <- subset(data, date_time > "2016-01-01" & date_time < "2017-01-01")
+
+# generate basic heatplot for salinity
+p <- heatplot(data_sub_2016, dateField = "date_time", distanceField = "m_value", wqVariable = "salinity", title="Salinity - 2016 Only")
+
+plot(p)
+
+# find the min/max of salinity to use as the endpoints of the color ramp
+min_sal <- min(data_sub_2016$salinity)
+max_sal <- max(data_sub_2016$salinity)
+
+print(paste("Range of Salinity:", min_sal, "-", max_sal))
+
+# change the break values for the color ramp but keep the default colors
+p2 <- p + change_gradient_breaks(mapped_break_values = c(min_sal, 0.1, 0.2, 0.3, max_sal)) + ggtitle("Salinity - 2016 only + modified color scale")
+
+
+plot(p2)
 
 ```
