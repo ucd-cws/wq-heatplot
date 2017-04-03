@@ -3,7 +3,8 @@
 #' This function gets the unqiue months and returns the middle of the month (the 15 th) to use as the date breaks
 #' @param dateField Field with dates
 #' @keywords date_breaks
-#' @export list of unique dates
+#' @return list of unique dates
+#' @export
 #' @examples
 #' unique_date_breaks()
 
@@ -20,13 +21,14 @@ unique_date_breaks <- function(dateField){
 #' This function gets the first of the month for given date_time object
 #' @param date Date Object
 #' @keywords date start month
+#' @return date object of the first of the month
 #' @export 
 #' @examples
 #' month_startdate()
 
 month_startdate <- function(date){
   d <- as.Date(date)
-  start_month <- cut(d, "month") # first day of the month with no time
+  start_month <- cut(d, "month") # first day of the month (without the time)
   date <- as.Date(start_month)
 }
 
@@ -54,38 +56,37 @@ axis_units <-function(x){
 #' @param distanceField field name with the distance information for the water quality point
 #' @param wqVaariable field name for the water quality variable to symbolize
 #' @param title the title for the plot
-#' @param formating ggplot formating options to alter plot appearance
+#' @param formatting ggplot formating options to alter plot appearance
 #' @keywords plot, heatplot
 #' @export 
 #' @examples
 #' ## Make a heatplot
-#' p <- heatplot(ex_data, "date_time", "m_value", "temp", "Example Reach Temperature", heatplot.format.default)
+#' p <- heatplot(data, "date_time", "m_value", "temp", "Example Reach Temperature", heatplot.format.default)
 
-heatplot <- function(df, dateField, distanceField, wqVariable, title, formating=heatplot.format.default){
+heatplot <- function(df, dateField, distanceField, wqVariable, title=NULL, formatting=heatplot.format.default){
   # convert date_time to a date on the 1st of the mont
   df[,dateField] <- as.Date(month_startdate(df[,dateField]))
   
-  # get unique dates to use as label breaks
-  date_breaks <- unique(df[,dateField])
-  
-  # plot using ggplot with geom_tile
-  p <- ggplot(df, aes_string(x=dateField, y=distanceField, color=wqVariable)) +
-    geom_point(pch=15, cex=3)+
-    scale_color_gradientn(colours=c("blue","green","yellow","orange","red")) + # set color gradient
-    ggtitle(title) +
+  # plot using ggplot constructor
+  date_breaks <- unique(df[[dateField]]) # get unique dates to use as label breaks
+  p <- ggplot(df, aes_string(x=dateField, y=distanceField, z=wqVariable)) +
+    stat_summary_2d(fun=mean, binwidth =c(31, 50), na.rm=TRUE) + # bin width is 31 day, height is 50m
     ylab("km")+
+    ggtitle(title)+
     scale_y_continuous(labels = axis_units) +
     scale_x_date(breaks=date_breaks, date_labels="%b - %Y") # format of x axis dates Mon - YEAR
-  pf <- formating(p) 
+  
+  # apply formatting
+  pf <- formatting(p) + change_gradient_breaks()
 }
 
 
-#' Default Format for Heatplot
+
+#' Default Formatting for Heatplot
 #'
-#' The defualt formating options for the heatplot
+#' The default formatting options for the heatplot
 #' @keywords plot, heatplot
 #' @export 
-
 
 heatplot.format.default <- function(p){
   p2 <- p + theme_bw() +  # change theme simple with no axis or tick marks
@@ -103,3 +104,20 @@ heatplot.format.default <- function(p){
     )
   return(p2)
 }
+
+
+#' Modify Color Ramp and Breaks
+#'
+#' Modify default colors and breaks used in the heatplot. The list of the colors and the list of breaks values must be equal.
+#' The default color ramp is blue-green-yellow-orange-red with breaks at 0%, 25%, 50%, 75%, 100% of the water quality variable.
+#' The break values can either be percentages (make sure the break values start with zero and end with 1) or the actual values
+#' of the variable. The actual values will be remapped internally to be between zero and one. 
+#' @param new_colors vector of colors to apply to the heatplot fill
+#' @param mapped_break_values vector of the break values to use for the specific colors (length of vector must match new_colors)
+#' @keywords color, breaks
+#' @export 
+
+change_gradient_breaks <- function(new_colors=c("blue","green","yellow","orange","red"), mapped_break_values=c(0,0.25,0.5,0.75,1)){
+  scale_fill_gradientn(colours=new_colors, values=rescale(mapped_break_values))
+}
+

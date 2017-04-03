@@ -4,8 +4,8 @@
 \alias{heatplot}
 \title{Heatplot}
 \usage{
-heatplot(df, dateField, distanceField, wqVariable, title,
-  formating = heatplot.format.default)
+heatplot(df, dateField, distanceField, wqVariable, title = NULL,
+  formatting = heatplot.format.default)
 }
 \arguments{
 \item{df}{dataframe (from Export Heatplot data csv)}
@@ -16,7 +16,7 @@ heatplot(df, dateField, distanceField, wqVariable, title,
 
 \item{title}{the title for the plot}
 
-\item{formating}{ggplot formating options to alter plot appearance}
+\item{formatting}{ggplot formating options to alter plot appearance}
 
 \item{wqVaariable}{field name for the water quality variable to symbolize}
 }
@@ -25,7 +25,7 @@ Plots month by river distance symbolized by water quality variable
 }
 \examples{
 ## Make a heatplot
-p <- heatplot(ex_data, "date_time", "m_value", "temp", "Example Reach Temperature", heatplot.format.default)
+p <- heatplot(data, "date_time", "m_value", "temp", "Example Reach Temperature", heatplot.format.default)
 }
 \keyword{heatplot}
 \keyword{plot,}

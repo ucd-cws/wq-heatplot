@@ -9,6 +9,9 @@ unique_date_breaks(dateField)
 \arguments{
 \item{dateField}{Field with dates}
 }
+\value{
+list of unique dates
+}
 \description{
 This function gets the unqiue months and returns the middle of the month (the 15 th) to use as the date breaks
 }

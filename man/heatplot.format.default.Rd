@@ -2,12 +2,12 @@
 % Please edit documentation in R/heatplots.R
 \name{heatplot.format.default}
 \alias{heatplot.format.default}
-\title{Default Format for Heatplot}
+\title{Default Formatting for Heatplot}
 \usage{
 heatplot.format.default(p)
 }
 \description{
-The defualt formating options for the heatplot
+The default formatting options for the heatplot
 }
 \keyword{heatplot}
 \keyword{plot,}

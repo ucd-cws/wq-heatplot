@@ -9,6 +9,9 @@ month_startdate(date)
 \arguments{
 \item{date}{Date Object}
 }
+\value{
+date object of the first of the month
+}
 \description{
 This function gets the first of the month for given date_time object
 }
